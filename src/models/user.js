@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 // User schema
 // Add saved cryptos for watch crypto feature
@@ -8,6 +9,7 @@ const userSchema = mongoose.Schema({
     type: String,
     validate: {
       validator: async function(username) {
+        console.log(username)
         const user = await this.constructor.findOne({ username });
         if(user) {
           if(this.id === user.id) {
@@ -30,7 +32,7 @@ const userSchema = mongoose.Schema({
   }
 })
 // Hash password
-userSchema.pre('save', async function(){
+userSchema.pre('save', async function(next){
   const user = this
 
   if (user.isModified('password')) user.password = await bcrypt.hash(user.password, 8);
