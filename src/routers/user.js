@@ -52,7 +52,13 @@ router.patch('/users/:id', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-  res.send({"message": "login!"})
+  try {
+    const user = await User.findByCredentials(req.body.username, req.body.password)
+    res.send(user)
+  } catch (e) {
+    res.status(400).send(e)
+  }
+  // Issue a jwt token/ save it to user
 })
 
 module.exports = router;
