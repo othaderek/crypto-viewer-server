@@ -2,25 +2,13 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
+const Schema = mongoose.Schema;
 // User schema
 // Add saved cryptos for watch crypto feature
-const userSchema = mongoose.Schema({
+const userSchema = new Schema({
   username: {
     type: String,
-    validate: {
-      validator: async function(username) {
-        console.log(username)
-        const user = await this.constructor.findOne({ username });
-        if(user) {
-          if(this.id === user.id) {
-            return true;
-          }
-          return false;
-        }
-        return true;
-      },
-      message: props => 'The specified username is already in use.'
-    },
+    unique: true,
     required: true,
     trim: true
   },
