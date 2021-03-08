@@ -14,20 +14,26 @@ router.get('/users', async (req, res) => {
 })
 
 router.post('/users', async (req, res) => {
-  // Create user
-  log(req.body);
   // Sanitize username
-  let u = util.sanitizeUsername(req.body)
-  const user = await new User(u);
+  const u = util.sanitizeUsername(req.body)
   // Add password hashing
-  user.save().then(() => {
-    res.send(user)
-  }).catch((err) => {
-    res.status(400);
-    res.send(err);
+  // Create user
+  const user = await new User(u);
+  try {
+    // Save
+    await user.save();
+    res.status(201).send(user)
+    log(c.green('User created'));
+
+  } catch(err) {
+    res.status(400).send(err)
     log(c.red(err));
-  })
-  log(c.green('User created'));
+  }
+  
+})
+
+router.post('/login', async (req, res) => {
+  res.send({"message": "login!"})
 })
 
 module.exports = router;
