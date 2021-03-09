@@ -22,7 +22,8 @@ router.post('/users', async (req, res) => {
   try {
     // Save
     await user.save();
-    res.status(201).send(user)
+    const token = await user.generateAuthToken();
+    res.status(201).send({user, token});
     log(c.green('User created'));
 
   } catch(err) {
@@ -35,8 +36,7 @@ router.post('/users', async (req, res) => {
 router.patch('/users/:id', async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['username', 'password'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-  log(isValidOperation)
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
   if (!isValidOperation) return send.status(400).send({error: 'Invalid updates!'});
 
   try {
@@ -46,19 +46,19 @@ router.patch('/users/:id', async (req, res) => {
 
     res.send(user);
   } catch (e) {
-    res.status(400).send(e)
+    res.status(400).send(e);
   }
 
 })
 
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findByCredentials(req.body.username, req.body.password)
-    res.send(user)
+    const user = await User.findByCredentials(req.body.username, req.body.password);
+    const token = await user.generateAuthToken();
+    res.send({user, token});
   } catch (e) {
-    res.status(400).send(e)
+    res.status(400).send(e);
   }
-  // Issue a jwt token/ save it to user
 })
 
 module.exports = router;
