@@ -3,13 +3,12 @@ const c = require('chalk');
 const router = express.Router();
 const User = require('../models/user');
 const util = require('../../utils/utility');
+const auth = require('../middleware/auth');
 
 const log = console.log;
 
-// refactor to seperate router files
-router.get('/users', async (req, res) => {
+router.get('/users', auth, async (req, res) => {
   const users = await User.find({}, '-password');
-  log(req);
   res.send(users);
 })
 

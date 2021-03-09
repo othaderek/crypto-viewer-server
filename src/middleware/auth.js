@@ -1,5 +1,8 @@
+const c = require('chalk');
+const log = console.log;
+
 const auth = async (req, res, next) => {
-  console.log('auth middleware');
+  log(c.blueBright('auth middleware'));
   next();
 }
 

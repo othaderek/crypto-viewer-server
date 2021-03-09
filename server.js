@@ -12,14 +12,6 @@ app.use(express.json());
 app.use(userRouter);
 app.use(exchangesRouter)
 
-// const jwt = require('jsonwebtoken');
-// const jwtFunc = async () => {
-//   const token = await jwt.sign({__id: "abc123"}, 'secret');
-//   jwtFunc.verify();
-//   log(c.blue(token))
-// }
-// jwtFunc();
-
 app.listen('3000', () => {
   log(c.green("Connected to port 3000"));
 })
